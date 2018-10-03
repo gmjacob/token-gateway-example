@@ -74,7 +74,7 @@ export default class DAppChainTokens extends React.Component {
 
     return (
       <div>
-        <h2>DAppChain Available Token</h2>
+        <h2>DAppChain Available SpringToken Token</h2>
         <div className="container">
           <div>{view}</div>
         </div>

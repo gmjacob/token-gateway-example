@@ -4,7 +4,8 @@ export default class EthGameTokenManager {
   static async createAsync() {
     const browserWeb3 = new Web3(window.web3.currentProvider)
     const networkId = await browserWeb3.eth.net.getId()
-
+    console.log(networkId)
+    console.log(GAME_TOKEN_JSON.networks)
     const contract = new browserWeb3.eth.Contract(
       GAME_TOKEN_JSON.abi,
       GAME_TOKEN_JSON.networks[networkId].address

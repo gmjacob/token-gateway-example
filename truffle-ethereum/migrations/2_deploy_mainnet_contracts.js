@@ -1,6 +1,6 @@
 const { writeFileSync } = require('fs')
 
-const SpringToken = artifacts.require('SpringToken')
+const SpringToken = artifacts.require('SPRINGToken')
 const Gateway = artifacts.require('Gateway')
 const MaxSupply = 1000
 module.exports = (deployer, network, accounts) => {
@@ -19,7 +19,7 @@ module.exports = (deployer, network, accounts) => {
     console.log(`SpringToken transaction at hash: ${SpringTokenContract.transactionHash}`)
 
     await gatewayInstance.toggleToken(SpringTokenInstance.address, { from: validator })
-    await SpringTokenInstance.mintToken(100)
+    await SpringTokenInstance.mint(100)
     await SpringTokenInstance.transfer(user, 100)
 
     writeFileSync('../gateway_address', gatewayInstance.address)

@@ -20,15 +20,16 @@ export default class EthTokens extends React.Component {
     const account = await this.props.ethAccountManager.getCurrentAccountAsync()
     const balance = await this.props.ethTokenManager.getBalanceOfUserAsync(account)
     const mapping = await this.props.dcAccountManager.getAddressMappingAsync(account)
-
+    const tokenName = await this.props.ethTokenManager.getTokenNameAsync(account)
     this.setState({ account, balance, mapping })
   }
 
   async sendToDAppChain(amount) {
     this.setState({ sending: true })
-
+    console.log("Sending to chain...")
     try {
-      await this.props.ethTokenManager.depositTokenOnGateway(this.state.account, amount)
+      let tx = await this.props.ethTokenManager.depositTokenOnGateway(this.state.account, amount);
+      console.log(tx)
       alert('The amount will be available on DappChain, check DAppChain ')
     } catch (err) {
       console.log('Transaction failed or denied by user')
@@ -58,7 +59,7 @@ export default class EthTokens extends React.Component {
 
     return (
       <div>
-        <h2>Ethereum Network Owned Tokens</h2>
+        <h2>Ethereum Network Owned Spring Tokens</h2>
         <div className="container">
           <div>{view}</div>
         </div>

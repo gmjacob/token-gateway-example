@@ -1,15 +1,96 @@
 pragma solidity ^0.4.24;
 
 import "openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
-import "./ERC20DAppToken.sol";
+import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "./ERC20Receiver.sol";
 
-/* Contract class to mint tokens and transfer */
-contract SPRINGToken is ERC20DAppToken , StandardToken, ERC20Reciever {
-    using SafeMath for uint256;
+contract Ownable {
+    address public owner;
 
-    string constant public name = 'SPRING Token';
-    string constant public symbol = 'SPRING';
+
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+
+
+    /**
+    * @dev The Ownable constructor sets the original `owner` of the contract to the sender
+    * account.
+    */
+    constructor () public {
+        owner = msg.sender;
+    }
+
+
+    /**
+    * @dev Throws if called by any account other than the owner.
+    */
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Has to be owner");
+        _;
+    }
+
+
+    /**
+    * @dev Allows the current owner to transfer control of the contract to a newOwner.
+    * @param newOwner The address to transfer ownership to.
+    */
+    function transferOwnership(address newOwner) onlyOwner public {
+        require(newOwner != address(0), "Ownership cannot be transferred to 0 address");
+        emit OwnershipTransferred(owner, newOwner);
+        owner = newOwner;
+    }
+
+}
+
+/**
+ * @title Pausable
+ * @dev Base contract which allows children to implement an emergency stop mechanism.
+ */
+contract Pausable is Ownable {
+    event Pause();
+    event Unpause();
+
+    bool public paused = false;
+
+
+    /**
+    * @dev Modifier to make a function callable only when the contract is not paused.
+    */
+    modifier whenNotPaused() {
+        require(!paused, "Contract is currently paused");
+        _;
+    }
+
+    /**
+    * @dev Modifier to make a function callable only when the contract is paused.
+    */
+    modifier whenPaused() {
+        require(paused, "Contract is not paused");
+        _;
+    }
+
+    /**
+    * @dev called by the owner to pause, triggers stopped state
+    */
+    function pause() public onlyOwner whenNotPaused {
+        paused = true;
+        emit Pause();
+    }
+
+    /**
+    * @dev called by the owner to unpause, returns to normal state
+    */
+    function unpause() public onlyOwner whenPaused {
+        paused = false;
+        emit Unpause();
+    }
+}
+
+contract SPRINGToken is StandardToken, ERC20Receiver, Ownable {
+    using SafeMath for uint256;
+    using AddressUtils for address;
+
+    string constant public name = "SPRING Token";
+    string constant public symbol = "SPRING";
     uint constant public decimals = 18;
     uint256 public totalSupply;
     uint256 public maxSupply;
@@ -35,7 +116,7 @@ contract SPRINGToken is ERC20DAppToken , StandardToken, ERC20Reciever {
         require (maxSupply >= (totalSupply.add(_amount)), "Total supply would be greater than max supply");
         totalSupply = totalSupply.add(_amount);
         balances[msg.sender] = balances[msg.sender].add(_amount);
-        Transfer(address(0), msg.sender, _amount);
+        emit Transfer(address(0), msg.sender, _amount);
         return true;
     }
 

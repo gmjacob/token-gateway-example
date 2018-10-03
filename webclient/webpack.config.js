@@ -1,6 +1,6 @@
 const webpack = require('webpack')
-const gameTokenJSON = require('../truffle-ethereum/build/contracts/GameToken.json')
-const dcGameTokenJSON = require('../truffle-dappchain/build/contracts/GameTokenDappChain.json')
+const gameTokenJSON = require('../truffle-ethereum/build/contracts/SPRINGToken.json')
+const dcGameTokenJSON = require('../truffle-dappchain/build/contracts/SPRINGTokenDappChain.json')
 const gatewayJSON = require('../truffle-ethereum/build/contracts/Gateway.json')
 
 module.exports = {

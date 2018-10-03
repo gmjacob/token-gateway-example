@@ -5,7 +5,7 @@ import "openzeppelin-solidity/contracts/AddressUtils.sol";
 import "./ERC20Receiver.sol";
 
 /* Contract class to mint tokens and transfer */
-contract SPRINGToken is StandardToken {
+contract SPRINGTokenDappChain is StandardToken {
     using SafeMath for uint256;
     using AddressUtils for address;
 
